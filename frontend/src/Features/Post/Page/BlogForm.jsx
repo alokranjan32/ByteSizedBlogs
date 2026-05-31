@@ -1,42 +1,46 @@
- import { useState } from "react";
+ import { useState,useEffect } from "react";
 import API from "../../../Api/Axios.jsx";
-import './BlogForm.css'
-
-export default function BlogForm() {
+import '../Styles/BlogForm.css'
+ 
+function BlogForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImage] = useState("");
   const [message, setMessage] = useState("");
+  const [tags,setTag]=useState("");
+
+ 
  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         setMessage("Please login first.");
         return;
       }
-
+ console.log("TOKEN:", token);
       const res = await API.post(
         "/blogs",
-        { title, content, imageUrl },
+        { title, content,imageUrl,tags:[tags]
+
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,  
           },
         }
       );
-
       setMessage("Blog created successfully!");
       console.log("Blog response:", res.data);
 
       // clear inputs
       setTitle("");
       setContent("");
-      setImageUrl("");
+      setImage("");
 
     } catch (err) {
+        console.log(err.response?.data);
       const serverMsg = err?.response?.data?.message || err?.message || "Failed to create blog.";
       setMessage(serverMsg);
 
@@ -47,9 +51,9 @@ export default function BlogForm() {
   };
 
   return (
-    <div  className="form-container">
-      <h2 className="form-heading">Create a Blog</h2>
-      <form onSubmit={handleSubmit}>
+    <div  className="main-container">
+      <h2 className="heading"> Post a Blog</h2>
+      <form onSubmit={(e)=>handleSubmit(e)} className="form-container">
         <input
           type="text"
           placeholder="Blog Title"
@@ -63,23 +67,30 @@ export default function BlogForm() {
           placeholder="Blog Content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          
           required
-          className="form-text"
+          className="form-input"
         />
 
+         
         <input
-          type="text"
-          placeholder="Image URL"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])}
           className="form-text"
         />
-
-        <button type="submit" className="form-button">Post Blog</button>
+         <select name="tags" id=""
+         value={tags}
+         onChange={(e)=>setTag(e.target.value)}>
+          <option value="Tech">Tech</option>
+          <option value="Ai">Ai</option>
+          <option value="Education">Education</option>
+         </select>
+        <button type="submit" className="btn">Post Blog</button>
       </form>
 
       {message && <p>{message}</p>}
     </div>
   );
 }
+
+export default BlogForm;

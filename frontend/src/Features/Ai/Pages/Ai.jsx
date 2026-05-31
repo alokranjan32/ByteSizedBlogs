@@ -2,6 +2,8 @@ import React from 'react'
 import axios from 'axios'
 import {useState,useEffect} from 'react'
 import '../Styles/Ai.css'
+
+const API_URL = import.meta.env.VITE_API_URL;
 function Ai() {
 
   const [state,setState]=useState([]);
@@ -10,7 +12,7 @@ function Ai() {
 
     const fetchBlogs=async()=>{
       try {
-        const res=await axios.get("https://bytesizedblogs-backend.onrender.com/api/user/blogs/");
+        const res=await axios.get(`{API_URL}/api/user/blogs/`);
         const resData=res.data.data;
         const aiData=resData.filter(p=>p.tags.includes("Ai"));
         setState(aiData);

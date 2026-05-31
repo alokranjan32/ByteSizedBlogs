@@ -5,6 +5,8 @@ import {useState,useEffect} from  'react'
 import '../Styles/Tech.css'
 
 
+const API_URL=import.meta.env.VITE_API_URL;
+
 function Tech() {
 
   const [state,setState]=useState([]);
@@ -13,7 +15,7 @@ function Tech() {
   useEffect(()=>{
       const fectchBlogs=async()=>{ 
       try {
-        const res=await axios.get("https://bytesizedblogs-backend.onrender.com/api/user/blogs/");
+        const res=await axios.get(`${API_URL}/api/user/blogs/ `);
         const resData=res.data.data;
         const techData=resData.filter(p=>p.tags.includes("Tech"));
         setState(techData);

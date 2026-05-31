@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API=axios.create({
-  baseURL: "https://bytesizedblogs-backend.onrender.com/api/user",
+  baseURL: `${import.meta.env.VITE_API_URL}/api/user`,
   withCredentials: true,
 })
 export default API;

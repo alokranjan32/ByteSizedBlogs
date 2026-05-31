@@ -6,11 +6,9 @@ import jwt from 'jsonwebtoken'
 const registerUser= AsyncHandler(async(req,res)=>{
    //requesting data from frontend
     const {name,email,password}=req.body;
-
-
 //check the details are enetered or not 
-    if(!name|| !email|| !password){
-        return res.status(402)
+    if(!name||!email|| !password){
+        return res.status(400)
         .json(
             {
                 success:false,
@@ -27,7 +25,6 @@ const registerUser= AsyncHandler(async(req,res)=>{
    }
 
    //creating a user 
-
   const user=await  User.create({
     name,
     email,
@@ -63,7 +60,6 @@ const registerUser= AsyncHandler(async(req,res)=>{
         name:user.name,
         email:user.email,
         role:user.role
-
     }
   });
 
@@ -72,11 +68,9 @@ const registerUser= AsyncHandler(async(req,res)=>{
 
 const loginUser=AsyncHandler(async(req,res)=>{
 
-  
     const {email,password}=req.body;
     //check user exists or not 
        const user=await User.findOne({email});
-       
        if(!user){
         throw new ApiError(404,"user not found");
        }
@@ -178,7 +172,18 @@ res
   success:true,
   message:"accessToken refreshed"
 })
+})
 
+const getme=AsyncHandler(async(req,res)=>{
+  const {id}=req.params;
+  const user=await User.findById(id);
+  if(!user){
+    throw new ApiError(404,"user not found");
+  }
+  return res.status(200)
+  .json(new ApiResponse(200,"user details fetched ",user))
+
+   
 
 })
-export{registerUser,loginUser,logout,refreshToken}
+export{registerUser,loginUser,logout,refreshToken,getme}

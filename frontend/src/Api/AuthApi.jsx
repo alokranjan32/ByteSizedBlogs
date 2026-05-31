@@ -1,8 +1,8 @@
  import axios from "axios";
  
-const API = axios.create({
-  baseURL: "https://bytesizedblogs-backend.onrender.com/api/user", 
-  withCredentials: true,  
+ const API = axios.create({
+  baseURL: `${import.meta.env.VITE_API_URL}/api/user`,
+  withCredentials: true,
 });
 export const registerUser = (data) => API.post("/register", data);
 

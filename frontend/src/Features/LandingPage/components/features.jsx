@@ -1,18 +1,19 @@
 import React from 'react'
 import '../styles/features.css'
 import {useEffect,useState} from 'react'
-import Cards from './Cards.jsx'
 import API from '../../../Api/Axios.jsx'
 
 function features() {
 
   const [state,setState]=useState([]);
+
+  const  limitwords=(text,limit=20)=>
+    text.split(" ").slice(0,limit).join(" ");  
  useEffect(()=>{
   const fetchFeatures=async()=>{
     try{
       const res = await API.get('/blogs');
       setState(res.data?.data?.slice(0, 3) ?? []);
-
 
     }catch(error){
         console.error("Error occurs while fetching features:", error);
@@ -24,23 +25,17 @@ function features() {
 
   return (
     <div className="features-container">
-      <div> 
         <h1 className="features-heading">Featured  Articles</h1>
-          <div className="" >
-            
+         <div className="card-container"> 
             {state.length>0?state.map((item)=>(
-
-               
-                <Cards  
-                title={item.title}
-                desc={item.content}
-                img={item.imageUrl} 
-
-                />
-
+              <div key={item} className=" features-card">
+               <h3>   { limitwords(item.title)}</h3>
+               <img src={item.imageUrl} alt="" 
+               className="feature-img"/>
+               </div> 
             )):(<h1>No featured articles available</h1>)}
 
-          </div>
+           
 
       </div>
       

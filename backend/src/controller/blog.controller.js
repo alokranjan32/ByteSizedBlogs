@@ -19,7 +19,7 @@ const createBlog = AsyncHandler(async (req, res) => {
     tag,
     slug,
     imageUrl,
-     author: req.user._id, 
+    author: req.user._id, 
   });
 
   res.status(201).json({ success: true, blog });
@@ -34,8 +34,6 @@ const getAllBlog = AsyncHandler(async (req, res) => {
   if (!blogs || blogs.length === 0) {
     throw new ApiError(404, "No blogs found");
   }
-
-  
   res.status(200).json({ success: true, data: blogs });
 });
 

@@ -3,10 +3,10 @@ import '../Styles/cards.css'
 import {useNavigate} from 'react-router-dom'
 
  
-function Card({src,title,content,id}) {
+function Card({src,title,content,id,author}) {
   const navigate=useNavigate();
   const handleClick=()=>{
-    navigate(`/blog/${id}`);
+    navigate(`/blog/${id}`)
   }
 
   const limitWords = (text, limit = 20) =>
@@ -21,6 +21,7 @@ function Card({src,title,content,id}) {
    <h3  className="card-heading">{limitWords(title)}</h3>
    <img src={src}  className="img"/>
    <p className="card-desc">{limitDescription(content)}</p>
+   <p className="author"> post by - {author}</p>
   </div>
    
 </div>

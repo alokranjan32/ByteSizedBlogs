@@ -8,16 +8,10 @@ const app = express();
 
  
 
-app.use(
-  cors({
-    origin: [
-      "https://alokranjan42.github.io",
-      "https://byte-sized-blogs-jwk5-dk8csda7e-alokranjan42s-projects.vercel.app",
-      "http://localhost:5173"
-    ],
-    credentials: true
-  })
-);
+ app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
