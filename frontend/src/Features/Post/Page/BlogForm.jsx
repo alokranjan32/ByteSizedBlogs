@@ -7,7 +7,7 @@ function BlogForm() {
   const [content, setContent] = useState("");
   const [imageUrl, setImage] = useState("");
   const [message, setMessage] = useState("");
-  const [tags,setTag]=useState("");
+  const [tags,setTag]=useState("Tech");
 
  
  
@@ -20,14 +20,19 @@ function BlogForm() {
         return;
       }
  console.log("TOKEN:", token);
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("tags", tags);
+      formData.append("image", imageUrl);
+
       const res = await API.post(
         "/blogs",
-        { title, content,imageUrl,tags:[tags]
-
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,  
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -38,6 +43,7 @@ function BlogForm() {
       setTitle("");
       setContent("");
       setImage("");
+      setTag("Tech");
 
     } catch (err) {
         console.log(err.response?.data);

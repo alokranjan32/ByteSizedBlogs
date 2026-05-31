@@ -1,9 +1,9 @@
 import React from 'react'
-import axios from 'axios'
+import Api from '../../../Api/Axios.jsx'
 import {useState,useEffect} from 'react'
 import '../Styles/Ai.css'
+import Card from '../../Home/Components/Cards.jsx'
 
-const API_URL = import.meta.env.VITE_API_URL;
 function Ai() {
 
   const [state,setState]=useState([]);
@@ -12,15 +12,18 @@ function Ai() {
 
     const fetchBlogs=async()=>{
       try {
-        const res=await axios.get(`{API_URL}/api/user/blogs/`);
+        const res=await Api.get("/blogs");
         const resData=res.data.data;
-        const aiData=resData.filter(p=>p.tags.includes("Ai"));
+        const aiData=resData.filter(p=>{
+          const blogTags=Array.isArray(p.tags)?p.tags:[p.tags];
+          return blogTags.some(tag=>tag?.trim().toLowerCase()==="ai");
+        });
         setState(aiData);
         setLoading(false);
         
       } catch (error) {
         console.log(error);
-        setLoading(true);
+        setLoading(false);
         
       }
 
@@ -31,13 +34,22 @@ function Ai() {
     return  <img src="https://i.gifer.com/4V0b.gif" className="loader" />
   } 
   return (
-    <div>
+    <div className="container">
+      <div className="cards-container">
      {state.map((item)=>(
-      <div key={item._id}>
-        {item.title}
-      </div>
+      <Card
+        key={item._id}
+        id={item._id}
+        slug={item.slug}
+        title={item.title}
+        src={item.imageUrl}
+        content={item.content}
+        author={item.author?.name}
+        authorId={item.author?._id}
+      />
 
      ))}
+      </div>
       
     </div>
   )

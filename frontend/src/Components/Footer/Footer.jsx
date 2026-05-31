@@ -8,8 +8,8 @@ function Footer() {
     <div className="footer-container">
       <p className="footer-item" onClick={() => navigate("/home")}  >Home</p>
       <p className="footer-item" onClick={() => navigate("/ai")}>Ai</p>
-      <p className="footer-item" onClick={() => navigate("/about-us")}>About Us</p>
-      <p  className="footer-item" onClick={() => navigate("/contact-us")}>Contact Us</p>
+      <p className="footer-item" onClick={() => navigate("/")}>About Us</p>
+      <p  className="footer-item" onClick={() => navigate("/contact")}>Contact Us</p>
     </div>
   );
 }

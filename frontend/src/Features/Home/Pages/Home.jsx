@@ -46,10 +46,12 @@ export default function Home() {
           <Card
             key={item._id}  
             id={item._id}
+            slug={item.slug}
             title={item.title}
             src={item.imageUrl}
             content={item.content}
             author=  {item.author.name}
+            authorId={item.author._id}
             className="cards"
           />
         ))}

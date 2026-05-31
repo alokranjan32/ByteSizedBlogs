@@ -1,4 +1,4 @@
- import React, { useState ,useEffect} from "react";
+import React, { useState } from "react";
 import { registerUser } from "../../../Api/AuthApi";
 import { useNavigate } from "react-router-dom";
 import "../Styles/Signup.css";
@@ -25,20 +25,23 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await registerUser(form);
+      const res = await registerUser({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password
+      });
 
       console.log(res.data);
       setMessage("signup successful");
-      localStorage.setItem("token", res.data.token);
-      useEffect(()=>{
-       const time= setTimeout(()=>{
-          navigate("/home");
-
-        },1000);
-        return ()=> clearInterval(time);
-
-
-      },[])
+      if (res.data.accessToken) {
+        localStorage.setItem("token", res.data.accessToken);
+      }
+      if (res.data.user) {
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     
       
     } catch (error) {
@@ -60,6 +63,7 @@ function Signup() {
             placeholder="Full Name"
             value={form.name}
             onChange={handleChange}
+            required
             className="signup-input"
           />
           <br />
@@ -70,6 +74,7 @@ function Signup() {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
+            required
             className="signup-input"
           />
           <br />
@@ -80,6 +85,7 @@ function Signup() {
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
+            required
             className="signup-input"
           />
           <br />

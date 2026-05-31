@@ -1,11 +1,9 @@
 import React from 'react'
-import axios from 'axios'
 import Api from '../../../Api/Axios.jsx'
 import {useState,useEffect} from  'react'
 import '../Styles/Tech.css'
+import Card from '../../Home/Components/Cards.jsx'
 
-
-const API_URL=import.meta.env.VITE_API_URL;
 
 function Tech() {
 
@@ -15,9 +13,12 @@ function Tech() {
   useEffect(()=>{
       const fectchBlogs=async()=>{ 
       try {
-        const res=await axios.get(`${API_URL}/api/user/blogs/ `);
+        const res=await Api.get("/blogs");
         const resData=res.data.data;
-        const techData=resData.filter(p=>p.tags.includes("Tech"));
+        const techData=resData.filter(p=>{
+          const blogTags=Array.isArray(p.tags)?p.tags:[p.tags];
+          return blogTags.some(tag=>tag?.trim().toLowerCase()==="tech");
+        });
         setState(techData);
         setLoading(false);
       } catch (error) {
@@ -32,15 +33,22 @@ function Tech() {
   }
   
   return (
-    <div> 
+    <div className="container"> 
+      <div className="cards-container">
        {state.map((item)=>(
-          <div key={item._id}>
-            <h3 className="h3">{item.title}</h3>
-            <p>{item.para}</p>
-           
-            </div>
+          <Card
+            key={item._id}
+            id={item._id}
+            slug={item.slug}
+            title={item.title}
+            src={item.imageUrl}
+            content={item.content}
+            author={item.author?.name}
+            authorId={item.author?._id}
+          />
 
        ))}
+      </div>
       
     </div>
   )

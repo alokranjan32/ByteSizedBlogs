@@ -1,22 +1,29 @@
 import { Blog } from "../models/blog.models.js";
+import mongoose from "mongoose";
 import AsyncHandler from "../utils/Asynchandler.js";
 import { ApiError } from "../utils/Apierror.js";
 import slugify from "slugify";
 
  
 const createBlog = AsyncHandler(async (req, res) => {
-  const { title, content, tag, imageUrl } = req.body;
+  const { title, content, tags } = req.body;
 
   if (!title || !content) {
     throw new ApiError(403, "Missing title or content");
   }
 
   const slug = slugify(title, { lower: true });
+  const imageUrl = req.file
+    ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+    : "";
+  const blogTags = Array.isArray(tags)
+    ? tags.map(tag => String(tag).trim()).filter(Boolean)
+    : [tags].map(tag => String(tag || "").trim()).filter(Boolean);
 
   const blog = await Blog.create({
     title,
     content,
-    tag,
+    tags: blogTags,
     slug,
     imageUrl,
     author: req.user._id, 
@@ -31,15 +38,17 @@ const getAllBlog = AsyncHandler(async (req, res) => {
     .populate("author", "name email")
     .sort({ createdAt: -1 });
 
-  if (!blogs || blogs.length === 0) {
-    throw new ApiError(404, "No blogs found");
-  }
   res.status(200).json({ success: true, data: blogs });
 });
 
  
 const getblogbySlug = AsyncHandler(async (req, res) => {
-  const blog = await Blog.findOne({ slug: req.params.slug });
+  let blog = await Blog.findOne({ slug: req.params.slug }).populate("author", "name email");
+
+  if (!blog && mongoose.Types.ObjectId.isValid(req.params.slug)) {
+    blog = await Blog.findById(req.params.slug).populate("author", "name email");
+  }
+
   if (!blog) {
     throw new ApiError(404, "Blog not found");
   }

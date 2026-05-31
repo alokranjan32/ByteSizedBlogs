@@ -53,8 +53,9 @@ const registerUser= AsyncHandler(async(req,res)=>{
   
   .json(
     {
-    sucess:true,
+    success:true,
     message:"user registered successfully",
+    accessToken,
      user:{
         _id:user._id,
         name:user.name,

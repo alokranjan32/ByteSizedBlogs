@@ -11,6 +11,7 @@ import Ai from './Features/Ai/Pages/Ai.jsx'
 import BlogForm from './Features/Post/Page/BlogForm.jsx'
 import Dashboard from './Features/Dashboard/Page/Dashboard.jsx'
 import Profile from './Features/Profile/Pages/Profile.jsx'
+import BlogDetails from './Features/BlogDetails/Page/BlogDetails.jsx'
 
 const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
  
@@ -55,6 +56,9 @@ const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
       },{
         path:"/me",
         element:<Profile/>
+      },{
+        path:"/blog/:slug",
+        element:<BlogDetails/>
       }
        
     ]

@@ -1,5 +1,6 @@
  import { Router } from "express";
 import { verifyAccessToken } from "../middlewares/auth.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
 import {
   createBlog,
   getAllBlog,
@@ -11,7 +12,7 @@ import {
 
 const router = Router();
 
-router.post("/blogs",  verifyAccessToken,  createBlog);      // create blog
+router.post("/blogs",  verifyAccessToken, upload.single("image"), createBlog);      // create blog
 router.get("/blogs",   getAllBlog);       // get all blogs
 router.get("/blogs/:slug",   getblogbySlug); // get blog by slug
 router.put("/blogs/:id", verifyAccessToken, updateBlog);   // update blog

@@ -4,7 +4,7 @@
  import '../Styles/Login.css'
 function Login() {
 
-  const [form, setForm] = useState({ email: " ", password: " " });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [message,setMessage]=useState("");
   const navigate=useNavigate();
 
@@ -23,11 +23,11 @@ function Login() {
       localStorage.setItem("token", res.data.accessToken);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       setMessage("login successful");
-      navigate("/");
+      navigate("/home");
 
     } catch (err) {
-      console.error(err.message);
-       setMessage("login unsuccessful");
+      console.error(err);
+      setMessage(err.response?.data?.message || "login unsuccessful");
     }
   };
 
@@ -61,7 +61,7 @@ function Login() {
         </button>
        
         <p className="login-links">Forgot Password</p>
-         <button className="login-secondary-btn" onClick={handleNavigate}>Register</button>
+         <button type="button" className="login-secondary-btn" onClick={handleNavigate}>Register</button>
       </form>
     </div>
     </div>
