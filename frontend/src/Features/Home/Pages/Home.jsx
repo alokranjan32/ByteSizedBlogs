@@ -5,7 +5,9 @@ import '../Styles/Home.css'
 import Card from  '../Components/Cards.jsx'
 import {useNavigate} from 'react-router-dom'
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.PROD
+  ? ''
+  : import.meta.env.VITE_API_URL;
 export default function Home() {
 
   const navigate=useNavigate();
