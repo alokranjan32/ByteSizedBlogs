@@ -6,7 +6,7 @@ import Card from  '../Components/Cards.jsx'
 import {useNavigate} from 'react-router-dom'
 
 const API_URL = import.meta.env.PROD
-  ? ''
+  ? '/_/backend'
   : import.meta.env.VITE_API_URL;
 export default function Home() {
 
